@@ -10,7 +10,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CaseItau.Application\CaseItau.Application.csproj" />
+    <ProjectReference Include="..\CaseItau.Domain\CaseItau.Domain.csproj" />
+    <ProjectReference Include="..\CaseItau.Infra.Data\CaseItau.Infra.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
