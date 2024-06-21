@@ -1,3 +1,6 @@
+Após Execução do projeto, acessar URL https://localhost:{porta}/swagger/index.html para visualização do Swagger;
+
+
 # Case de engenharia Itau - .Net
 
 ## Introdução
