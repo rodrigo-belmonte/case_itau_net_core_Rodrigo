@@ -10,6 +10,7 @@ using CaseItau.Domain.Models;
 using CaseItau.Domain.Entity;
 using CaseItau.Domain.Reponses;
 using CaseItau.Domain.Reponses.Fundo;
+using System.Net;
 
 namespace CaseItau.API.Controllers
 {
@@ -23,8 +24,16 @@ namespace CaseItau.API.Controllers
         {
             _fundoService = fundoService;
         }
-        // GET: api/Fundo
+
+        /// <summary>
+        /// Retorna lista de todos os Fundos Cadastrados
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Sucesso - Retorna todos os Fundos</response>
+        /// <response code="400">Erro - Retorna Lista de Erros de Validação</response>
         [HttpGet]
+        [ProducesResponseType(typeof(GetListFundosTipoFundoResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetListFundosTipoFundoResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<GetListFundosTipoFundoResponse>> Get()
         {
             var response = await _fundoService.GetAllFundos();
@@ -36,8 +45,15 @@ namespace CaseItau.API.Controllers
             return Ok(response);
         }
 
-        // GET: api/Fundo/ITAUTESTE01
+        /// <summary>
+        /// Retorna Fundo A partir do Codigo
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Sucesso - Retorna um fundo </response>
+        /// <response code="400">Erro - Retorna Lista de Erros de Validação</response>
         [HttpGet("{codigo}", Name = "Get")]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<FundoTipoFundoResponse>> Get(string codigo)
         {
             var response = await _fundoService.GetFundoById(codigo);
@@ -49,8 +65,15 @@ namespace CaseItau.API.Controllers
             return Ok(response);
         }
 
-        // POST: api/Fundo
+        /// <summary>
+        /// Cadastro de Fundo 
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Sucesso - Retorna Fundo Cadastrado</response>
+        /// <response code="400">Erro - Retorna Lista de Erros de Validação</response>        
         [HttpPost]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<FundoTipoFundoResponse>> Post([FromBody] Fundo fundo)
         {
             //Validar Se TipoExiste
@@ -65,11 +88,18 @@ namespace CaseItau.API.Controllers
             return Ok(response);
         }
 
-        // PUT: api/Fundo/ITAUTESTE01
+        /// <summary>
+        /// Alteração de Fundo
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Sucesso - Retorna Fundo Atualizado</response>
+        /// <response code="400">Erro - Retorna Lista de Erros de Validação</response>        
         [HttpPut("{codigo}")]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<FundoTipoFundoResponse>> Put(string codigo, [FromBody] UpdateFundoRequestModel fundo)
         {
-            
+
             var response = await _fundoService.UpdateFundo(codigo, fundo);
 
             if (!response.Success)
@@ -78,11 +108,18 @@ namespace CaseItau.API.Controllers
             }
 
             return Ok(response);
-            
+
         }
 
-        // DELETE: api/Fundo/ITAUTESTE01
+        /// <summary>
+        /// Exclusão de Fundo
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Sucesso - Exclui Fundo </response>
+        /// <response code="400">Erro - Retorna Lista de Erros de Validação</response>        
         [HttpDelete("{codigo}")]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<BaseResponse>> Delete(string codigo)
         {
             var response = await _fundoService.DeleteFundo(codigo);
@@ -95,7 +132,15 @@ namespace CaseItau.API.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Movimentação de Patrimonio
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Sucesso - Retorna fundo com Patrimonio Atualizado</response>
+        /// <response code="400">Erro - Retorna Lista de Erros de Validação</response>
         [HttpPut("{codigo}/patrimonio")]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FundoTipoFundoResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<FundoTipoFundoResponse>> MovimentarPatrimonio(string codigo, [FromBody] decimal movimentacao)
         {
             var response = await _fundoService.MovimentarFundo(codigo, movimentacao);

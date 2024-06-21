@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CaseItau.Application;
 using CaseItau.Infra.Data;
@@ -38,6 +40,9 @@ namespace CaseItau.API
                     Title = "Fundo API",
                     Description = "",
                 });
+                var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+                c.EnableAnnotations();
             });
             services.AddDataServices(Configuration);
         }
