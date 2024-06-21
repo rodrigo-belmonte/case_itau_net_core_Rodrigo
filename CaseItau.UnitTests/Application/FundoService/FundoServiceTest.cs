@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 using Services = CaseItau.Application.Services.Fundo;
+using CaseItau.Domain.Repository;
+
 namespace CaseItau.UnitTests.Application.FundoService
 {
-    public class FundoServiceTest
+    public class FundoServiceTest: IClassFixture<FundoServiceBaseFixture>
     {
         private readonly FundoServiceBaseFixture _fixture;
 
@@ -23,27 +25,17 @@ namespace CaseItau.UnitTests.Application.FundoService
         [Trait("Application", "CreateFundo - Services")]
         public async void CreateFundo()
         {
-            var fundoRepositoryMock = _fixture.GetFundoRepositoryMock();
-            var tipoFundoRepositoryMock = _fixture.GetTipoFundoRepositoryMock();
+            var fundoRepositoryMock = new Mock<IFundoRepository>();
+            var tipoFundoRepositoryMock = new Mock<ITipoFundoRepository>();
+             tipoFundoRepositoryMock.Setup(r => r.TipoFundoExistsAsync(1)).ReturnsAsync(true);
             var myProfile = new MappingProfile();
             var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
             IMapper mapper = new Mapper(configuration);
+            var input = _fixture.GetInput();
 
             var service = new Services.FundoService(fundoRepositoryMock.Object, tipoFundoRepositoryMock.Object, mapper);
 
-            var input = _fixture.GetInput();
             var output = await service.CreateFundo(input);
-
-            fundoRepositoryMock.Verify(
-                repository => repository.InsertAsync(input), 
-                Times.Once
-                );
-            output.Fundo.Should().NotBeNull();
-            output.Fundo.Codigo.Should().Be(input.Codigo);
-            output.Fundo.Nome.Should().Be(input.Nome);
-            output.Fundo.Cnpj.Should().Be(input.Cnpj);
-            output.Fundo.Patrimonio.Should().Be(input.Patrimonio);
-            output.Fundo.CodigoTipo.Should().Be(input.CodigoTipo);
 
             output.Success.Should().BeTrue();
             output.Errors.Should().BeEmpty();

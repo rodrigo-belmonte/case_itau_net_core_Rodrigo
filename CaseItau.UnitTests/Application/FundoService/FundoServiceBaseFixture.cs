@@ -13,17 +13,10 @@ namespace CaseItau.UnitTests.Application.FundoService
     public class FundoServiceBaseFixture
     {
         public Faker Faker { get; set; }
-
-        protected FundoServiceBaseFixture()
-            => Faker = new Faker("pt_BR");
-
-        public bool GetRandomBoolean()
-            => new Random().NextDouble() < 0.5;
-
-        public Mock<IFundoRepository> GetFundoRepositoryMock() => new Mock<IFundoRepository>();
-        public Mock<ITipoFundoRepository> GetTipoFundoRepositoryMock() => new Mock<ITipoFundoRepository>();
-
-
+        public FundoServiceBaseFixture()
+        {
+            Faker = new Faker("pt_BR");
+        }
         public Domain.Entity.Fundo GetInput()
         {
             return GetValidFundo();
@@ -33,10 +26,10 @@ namespace CaseItau.UnitTests.Application.FundoService
         {
             return new Domain.Entity.Fundo
             {
-                Codigo = $"ITAU{Faker.Random.String(2)}{Faker.Random.Int(100, 999)}",
+                Codigo = $"ITAU{Faker.Random.String2(2)}{Faker.Random.Int(100, 999)}",
                 Cnpj = Faker.Company.Cnpj(),
                 Nome = Faker.Company.CompanyName(),
-                CodigoTipo = Faker.Random.Number(1, 5),
+                CodigoTipo = 1,
                 Patrimonio = Faker.Random.Decimal()
             };
         }
